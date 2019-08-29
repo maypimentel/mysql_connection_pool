@@ -1,6 +1,7 @@
-version: '3'
+version: '3.4'
 services:
   app:
+    restart: always
     depends_on:
       - mysql
     build: .
@@ -10,3 +11,10 @@ services:
       - mysql
   mysql:
     image: 'mysql:5.7'
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - './create-db.sql:/docker-entrypoint-initdb.d/create-db.sql'
