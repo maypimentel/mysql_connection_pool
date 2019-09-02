@@ -39,14 +39,14 @@ class MySQLPool(object):
         self._pool_name = pool_name
         self._pool_size = pool_size
         self._pool_max_size = pool_max_size
-        self._cnx_queue = queue.Queue(self._pool_max_size)
+        self._cnx_pool = queue.Queue(self._pool_max_size)
         self._used_connections = 0
         self._create_pool(pool_size)
 
     def _create_pool(self, pool_size):
         # Creates a pool with pool_size
-        while self._cnx_queue.qsize() < pool_size:
-            self.queue_connection(self._create_connection())
+        while self._cnx_pool.qsize() < pool_size:
+            self.pool_connection(self._create_connection())
 
     def _create_connection(self):
         try:
@@ -55,28 +55,28 @@ class MySQLPool(object):
         except Error as err:
             raise err
 
-    def queue_connection(self, cnx):
+    def pool_connection(self, cnx):
         if not isinstance(cnx, MySQLConnection):
             raise errors.PoolError(
                 "Connection instance not subclass of MySQLConnection.")
         try:
-            self._cnx_queue.put(cnx, block=False)
+            self._cnx_pool.put(cnx, block=False)
         except queue.Full:
             errors.PoolError("Failed adding connection; queue is full")
 
     def get_connection(self):
         with CONNECTION_POOL_LOCK:
             try:
-                cnx = self._cnx_queue.get(block=False)
+                cnx = self._cnx_pool.get(block=False)
                 self._recycle(cnx)
                 self._used_connections += 1
                 # If queue is empty but used_connections is lower than 
                 # pool_max_size, create a new connection
             except queue.Empty:
-                if self._used_connections < self._pool_max_size and not self._cnx_queue.full():
-                    self.queue_connection(self._create_connection())
+                if self._used_connections < self._pool_max_size and not self._cnx_pool.full():
+                    cnx = self._create_connection()
                     self._used_connections += 1
-                    cnx = self._cnx_queue.get(block=False)
+                    pass
                 else:
                     raise errors.PoolError("Failed getting connection; pool exhausted")
             except Error as err:
@@ -91,7 +91,7 @@ class MySQLPool(object):
                 self._used_connections -= 1
             except errors.InterfaceError:
                 # Failed to reconnect, give connection back to pool
-                self.queue_connection(cnx)
+                self.pool_connection(cnx)
                 raise
 
     def close(self):
@@ -100,7 +100,7 @@ class MySQLPool(object):
     def _remove_connections(self):
         with CONNECTION_POOL_LOCK:
             cnt = 0
-            cnxq = self._cnx_queue
+            cnxq = self._cnx_pool
             while cnxq.qsize():
                 try:
                     cnx = cnxq.get(block=False)

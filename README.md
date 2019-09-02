@@ -11,7 +11,7 @@ Tem o objetivo de gerenciar um pool de conexões reciclando ou encerrando as con
 from mysql_connection_pool import MySQLPool
 
 mypool = MySQLPool(
-    host='mysql', port='3306', user='usertest',
+    host='mysql', port='3306', user='user',
     password='password', database='library', pool_name='mypool',
     pool_size=4, pool_max_size=4
 )
@@ -24,8 +24,8 @@ for book in cursor.fetchall():
 
 cursor.close()
 cnx.disconnect()
-# Requeued connection after use
-mypool.queue_connection(cnx)
+# Requeued connection for reuse
+mypool.pool_connection(cnx)
 # Close all other unused connections
 mypool.close()
 ```
