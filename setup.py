@@ -17,13 +17,13 @@ install_reqs = parse_requirements('requirements.txt', session=PipSession())
 # reqs is a list of requirement
 reqs = [str(ir.req) for ir in install_reqs]
 
-setup(name='mysql-connection-pool',
-      version='1.0.0',
+setup(name='mysql_connection_pool',
+      version='1.0.1',
       url='https://github.com/maypimentel/mysql_connection_pool',
       install_requires=reqs,
       author='Maycon Pimentel',
       author_email='maycon.pimentel@gmail.com',
       description='Mysql connection pool',
-      py_modules=['mysql-connection-pool'],
-      packages=['mysql-connection-pool']
+      py_modules=['mysql_connection_pool'],
+      packages=['mysql_connection_pool']
     )

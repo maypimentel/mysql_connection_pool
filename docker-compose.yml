@@ -5,8 +5,6 @@ services:
     depends_on:
       - mysql
     build: .
-    ports:
-      - "5000:5000"
     links:
       - mysql
   mysql:
