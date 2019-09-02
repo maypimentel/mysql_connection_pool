@@ -23,7 +23,9 @@ for book in cursor.fetchall():
     print(book['name'])
 
 cursor.close()
-cnx.close()
-# Close all other un used connections
+cnx.disconnect()
+# Requeued connection after use
+mypool.queue_connection(cnx)
+# Close all other unused connections
 mypool.close()
 ```
