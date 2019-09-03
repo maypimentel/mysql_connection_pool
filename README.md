@@ -17,10 +17,10 @@ mypool = MysqlPool(
 )
 
 cnx = mypool.get_connection()
-cursor = cnx.cursor()
-cursor.execute('select * from book')
+cursor = cnx.cursor(dictionary=True)
+cursor.execute('select title from book')
 for book in cursor.fetchall():
-    print(book['name'])
+    print(book['title'])
 
 cursor.close()
 cnx.disconnect()
@@ -44,4 +44,5 @@ make stop
 make start-as-daemon
 sleep 5
 make test-on-docker
+make stop
 ```

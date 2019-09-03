@@ -11,7 +11,7 @@ def worker(pool, thread_num):
         print('\nThread: %i \n' % (thread_num))
         cnx = pool.get_connection()
 
-        cursor = cnx.cursor()
+        cursor = cnx.cursor(dictionary=True)
         query = '''
                 SELECT 
                     b.title, 
@@ -22,7 +22,7 @@ def worker(pool, thread_num):
             '''
         cursor.execute(query % (thread_num))
         for book in cursor.fetchall():
-            print('Book:{}, Author:{}'.format(book[0], book[1]))
+            print('Book:{}, Author:{}'.format(book['title'], book['name']))
 
         cursor.close()
         cnx.disconnect()
