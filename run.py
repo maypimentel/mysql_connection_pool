@@ -30,7 +30,6 @@ def worker(pool, thread_num):
         pool.pool_connection(cnx)
         sleep(1)
 
-sleep(10) # waiting for the database to be ready
 mypool = MysqlPool(pool_size=3, pool_max_size=4)
 # Start 4 threads
 for i in range(4):
