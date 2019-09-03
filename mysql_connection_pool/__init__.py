@@ -6,6 +6,7 @@
 # date               :20190902
 # copyright          :Maycon Pimentel
 
+from .default_settings import *
 from mysql.connector import MySQLConnection, errors, Error
 import queue
 import threading
@@ -18,8 +19,8 @@ class MySQLPool(object):
     create a pool when connect mysql, which will decrease the time spent in 
     request connection, create connection and close connection.
     """
-    def __init__(self, host='mysql', port='3306', user='usertest',
-                 password='password', database='library', pool_name='mypool',
+    def __init__(self, host=MYSQL_HOST, port=MYSQL_PORT, user=MYSQL_USER,
+                 password=MYSQL_PASSWORD, database=MYSQL_DATABASE, pool_name=POOL_NAME,
                  pool_size=3, pool_max_size=10):
         if pool_size > pool_max_size or pool_size <= 0:
             raise AttributeError('Error: pool_size should be higher 0 and lower or equal to pool_max_size')

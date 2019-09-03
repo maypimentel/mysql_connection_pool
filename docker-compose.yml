@@ -7,6 +7,13 @@ services:
     build: .
     links:
       - mysql
+    environment:
+      POOL_NAME: mypool
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: usertest
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: library
   mysql:
     image: 'mysql:5.7'
     restart: always
