@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   app:
-    restart: always
+    restart: 'no'
     depends_on:
       - mysql
     build: .
@@ -16,7 +16,7 @@ services:
       MYSQL_DATABASE: library
   mysql:
     image: 'mysql:5.7'
-    restart: always
+    restart: 'no'
     ports:
       - 3306:3306
     environment:

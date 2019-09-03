@@ -8,9 +8,9 @@ Tem o objetivo de gerenciar um pool de conexões reciclando ou encerrando as con
 
 ## Como usar
 ```python
-from mysql_connection_pool import MySQLPool
+from mysql_connection_pool import MysqlPool
 
-mypool = MySQLPool(
+mypool = MysqlPool(
     host='mysql', port='3306', user='user',
     password='password', database='library', pool_name='mypool',
     pool_size=4, pool_max_size=4

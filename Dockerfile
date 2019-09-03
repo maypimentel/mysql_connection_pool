@@ -6,4 +6,4 @@ FROM python:3.7-alpine
     RUN pip install -r requirements.txt
     COPY . ${APPDIR}
     RUN pip install .
-    CMD ["python", "run.py"]
+    CMD ["python3", "run.py"]

@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from mysql_connection_pool import MySQLPool
+from mysql_connection_pool import MysqlPool
 import random
 from threading import Thread
 from time import sleep
 
-mypool = MySQLPool(pool_size=3, pool_max_size=4)
 
 def worker(pool, thread_num):
     while True:
@@ -17,8 +16,9 @@ def worker(pool, thread_num):
                 SELECT 
                     b.title, 
                     a.name 
-                FROM book b LEFT JOIN author a on a.id = b.author_id
-                WHERE b.author_id = %s;
+                FROM book b INNER JOIN author a on a.id = b.author_id
+                WHERE b.author_id = %s
+                LIMIT 5;
             '''
         cursor.execute(query % (thread_num))
         for book in cursor.fetchall():
@@ -30,10 +30,9 @@ def worker(pool, thread_num):
         pool.pool_connection(cnx)
         sleep(1)
 
-sleep(10)
+sleep(10) # waiting for the database to be ready
+mypool = MysqlPool(pool_size=3, pool_max_size=4)
 # Start 4 threads
 for i in range(4):
     t = Thread(target=worker, args=[mypool, i+1])
     t.start()
-
-# print('\nOuther closed connections: %i\n' % mypool.close())

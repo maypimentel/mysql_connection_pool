@@ -1,12 +1,12 @@
 import pytest
 
-from mysql_connection_pool import MySQLPool
+from mysql_connection_pool import MysqlPool
 from mysql.connector import MySQLConnection
 from mysql.connector.errors import PoolError
 
 class TestMysqlConnectionPool:
     def setup_method(self, method):
-        self.pool = MySQLPool(pool_size=2, pool_max_size=2)
+        self.pool = MysqlPool(pool_size=2, pool_max_size=2)
 
     def test_cnx_type(self):
         cnx = self.pool.get_connection()
