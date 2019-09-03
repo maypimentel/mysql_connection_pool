@@ -15,10 +15,6 @@ CONNECTION_POOL_LOCK = threading.RLock()
 
 
 class MySQLPool(object):
-    """
-    create a pool when connect mysql, which will decrease the time spent in 
-    request connection, create connection and close connection.
-    """
     def __init__(self, host=MYSQL_HOST, port=MYSQL_PORT, user=MYSQL_USER,
                  password=MYSQL_PASSWORD, database=MYSQL_DATABASE, pool_name=POOL_NAME,
                  pool_size=3, pool_max_size=10):
@@ -63,7 +59,7 @@ class MySQLPool(object):
         try:
             self._cnx_pool.put(cnx, block=False)
         except queue.Full:
-            errors.PoolError("Failed adding connection; queue is full")
+            errors.PoolError("Queue is full")
 
     def get_connection(self):
         with CONNECTION_POOL_LOCK:
@@ -79,7 +75,7 @@ class MySQLPool(object):
                     self._used_connections += 1
                     pass
                 else:
-                    raise errors.PoolError("Failed getting connection; pool exhausted")
+                    raise errors.PoolError("Pool exhausted")
             except Error as err:
                 raise err
 

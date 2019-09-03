@@ -30,7 +30,7 @@ def worker(pool, thread_num):
         pool.pool_connection(cnx)
         sleep(1)
 
-sleep(5)
+sleep(10)
 # Start 4 threads
 for i in range(4):
     t = Thread(target=worker, args=[mypool, i+1])
