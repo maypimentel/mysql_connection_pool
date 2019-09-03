@@ -19,7 +19,7 @@ class TestMysqlConnectionPool:
         cursor.fetchall()
         assert cursor.rowcount == 1
 
-    def test_cnx_empty(self):
+    def test_pool_empty(self):
         cnx1 = self.pool.get_connection()
         cnx2 = self.pool.get_connection()
         with pytest.raises(PoolError, match='Pool exhausted'):
